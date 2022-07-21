@@ -5,7 +5,7 @@ import data from '../top50.json';
 
 export default function Home() {
   const [list, setList] = React.useState(data);
-  const [sortBy, setSortBy] = React.useState('number');
+  const [sortBy, setSortBy] = React.useState(null);
   const [sortDirection, setSortDirection] = React.useState(SortDirection.ASC);
 
   const ref = React.useRef();
