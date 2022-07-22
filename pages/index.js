@@ -7,6 +7,8 @@ import {
 } from 'react-virtualized';
 import React from 'react';
 
+import 'react-virtualized/styles.css';
+
 import data from '../top50.json';
 
 let sortState = null;
@@ -64,7 +66,6 @@ export default function Home() {
       rowCount={list.length}
       rowGetter={({ index }) => list[index]}
       rowHeight={40}
-      rowStyle={{ display: 'flex' }}
       sort={sortState.sort}
       width={940}
     >
