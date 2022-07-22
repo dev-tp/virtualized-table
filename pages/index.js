@@ -37,6 +37,10 @@ export default function Home() {
   }
 
   function sort({ sortBy, sortDirection }) {
+    if (sortBy.length === 0) {
+      return setList(data);
+    }
+
     const sortedList = [...list].sort((a, b) =>
       sortBy
         .map((label) =>
