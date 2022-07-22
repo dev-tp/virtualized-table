@@ -1,4 +1,5 @@
 import {
+  AutoSizer,
   Column,
   createTableMultiSort,
   SortDirection,
@@ -59,40 +60,44 @@ export default function Home() {
   }
 
   return (
-    <Table
-      headerHeight={40}
-      height={500}
-      ref={ref}
-      rowCount={list.length}
-      rowGetter={({ index }) => list[index]}
-      rowHeight={40}
-      sort={sortState.sort}
-      width={940}
-    >
-      <Column
-        dataKey="number"
-        headerRenderer={headerRenderer}
-        label="#"
-        width={40}
-      />
-      <Column
-        dataKey="artist"
-        headerRenderer={headerRenderer}
-        label="Artist"
-        width={300}
-      />
-      <Column
-        dataKey="title"
-        headerRenderer={headerRenderer}
-        label="Title"
-        width={300}
-      />
-      <Column
-        dataKey="label"
-        headerRenderer={headerRenderer}
-        label="Label"
-        width={300}
-      />
-    </Table>
+    <AutoSizer>
+      {({ width, height }) => (
+        <Table
+          headerHeight={40}
+          height={height}
+          ref={ref}
+          rowCount={list.length}
+          rowGetter={({ index }) => list[index]}
+          rowHeight={40}
+          sort={sortState.sort}
+          width={width}
+        >
+          <Column
+            dataKey="number"
+            headerRenderer={headerRenderer}
+            label="#"
+            width={40}
+          />
+          <Column
+            dataKey="artist"
+            headerRenderer={headerRenderer}
+            label="Artist"
+            width={300}
+          />
+          <Column
+            dataKey="title"
+            headerRenderer={headerRenderer}
+            label="Title"
+            width={300}
+          />
+          <Column
+            dataKey="label"
+            headerRenderer={headerRenderer}
+            label="Label"
+            width={300}
+          />
+        </Table>
+      )}
+    </AutoSizer>
   );
 }
