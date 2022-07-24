@@ -40,20 +40,20 @@ export default function Home() {
   function headerRenderer({ dataKey, label }) {
     return (
       <React.Fragment key={dataKey}>
-        {/* <span
+        <span
           className="ReactVirtualized__Table__headerTruncatedText"
           title={label}
         >
           {label}
-        </span> */}
-        {/* {sortState.sortBy.includes(dataKey) && (
+        </span>
+        {sortState.sortBy.includes(dataKey) && (
           <SortIndicator sortDirection={sortState.sortDirection[dataKey]} />
-        )} */}
+        )}
         <Draggable
           axis="x"
           defaultClassName="DragHandle"
           defaultClassNameDragging="DragHandleActive"
-          onClick={(_, { deltaX }) => resizeRow(dataKey, deltaX)}
+          onDrag={(_, { deltaX }) => resizeRow(dataKey, deltaX)}
           position={{ x: 0 }}
           zIndex={1}
         >
@@ -64,7 +64,27 @@ export default function Home() {
   }
 
   function resizeRow(dataKey, deltaX) {
-    console.log(dataKey, deltaX)
+    const percentDelta = deltaX / 1920;
+
+    if (dataKey === 'number') {
+      setColumn({
+        ...column,
+        number: column.number + percentDelta,
+        artist: column.artist - percentDelta,
+      });
+    } else if (dataKey === 'artist') {
+      setColumn({
+        ...column,
+        artist: column.artist + percentDelta,
+        title: column.title - percentDelta,
+      });
+    } else if (dataKey === 'title') {
+      setColumn({
+        ...column,
+        title: column.title + percentDelta,
+        label: column.label - percentDelta,
+      });
+    }
   }
 
   function sort({ sortBy, sortDirection }) {
