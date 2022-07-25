@@ -37,7 +37,9 @@ export default function Home() {
     sortState = createTableMultiSort(sort);
   }
 
-  function headerRenderer({ dataKey, label }) {
+  function headerRenderer(columnData, width, isDraggable = true) {
+    const { dataKey, label } = columnData;
+
     return (
       <React.Fragment key={dataKey}>
         <span
@@ -49,22 +51,24 @@ export default function Home() {
         {sortState.sortBy.includes(dataKey) && (
           <SortIndicator sortDirection={sortState.sortDirection[dataKey]} />
         )}
-        <Draggable
-          axis="x"
-          defaultClassName="DragHandle"
-          defaultClassNameDragging="DragHandleActive"
-          onDrag={(_, { deltaX }) => resizeRow(dataKey, deltaX)}
-          position={{ x: 0 }}
-          zIndex={1}
-        >
-          <span className="DragHandleIcon">⋮</span>
-        </Draggable>
+        {isDraggable && (
+          <Draggable
+            axis="x"
+            defaultClassName="DragHandle"
+            defaultClassNameDragging="DragHandleActive"
+            onDrag={(_, { deltaX }) => resizeRow(dataKey, deltaX, width)}
+            position={{ x: 0 }}
+            zIndex={1}
+          >
+            <span className="DragHandleIcon">⋮</span>
+          </Draggable>
+        )}
       </React.Fragment>
     );
   }
 
-  function resizeRow(dataKey, deltaX) {
-    const percentDelta = deltaX / 1920;
+  function resizeRow(dataKey, deltaX, width) {
+    const percentDelta = deltaX / width;
 
     if (dataKey === 'number') {
       setColumn({
@@ -122,25 +126,25 @@ export default function Home() {
         >
           <Column
             dataKey="number"
-            headerRenderer={headerRenderer}
+            headerRenderer={(data) => headerRenderer(data, width)}
             label="#"
             width={width * column.number}
           />
           <Column
             dataKey="artist"
-            headerRenderer={headerRenderer}
+            headerRenderer={(data) => headerRenderer(data, width)}
             label="Artist"
             width={width * column.artist}
           />
           <Column
             dataKey="title"
-            headerRenderer={headerRenderer}
+            headerRenderer={(data) => headerRenderer(data, width)}
             label="Title"
             width={width * column.title}
           />
           <Column
             dataKey="label"
-            headerRenderer={headerRenderer}
+            headerRenderer={(data) => headerRenderer(data, width, false)}
             label="Label"
             width={width * column.label}
           />
