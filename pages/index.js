@@ -20,7 +20,6 @@ function compare(a, b, inverse = false) {
   return inverse ? -result : result;
 }
 
-// codesandbox.io/s/react-virtualized-resizable-columns-forked-n0p87s
 export default function Home() {
   const [column, setColumn] = React.useState({
     number: 0.25,
@@ -54,13 +53,11 @@ export default function Home() {
         {isDraggable && (
           <Draggable
             axis="x"
-            defaultClassName="DragHandle"
-            defaultClassNameDragging="DragHandleActive"
             onDrag={(_, { deltaX }) => resizeRow(dataKey, deltaX, width)}
             position={{ x: 0 }}
             zIndex={1}
           >
-            <span className="DragHandleIcon">⋮</span>
+            <span style={{ position: 'absolute', right: 0 }}>|</span>
           </Draggable>
         )}
       </React.Fragment>
@@ -116,6 +113,7 @@ export default function Home() {
       {({ width, height }) => (
         <Table
           headerHeight={40}
+          headerStyle={{ position: 'relative' }}
           height={height}
           ref={ref}
           rowCount={list.length}
