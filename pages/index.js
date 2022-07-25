@@ -16,8 +16,7 @@ import data from '../top50.json';
 let sortState = null;
 
 function compare(a, b, inverse = false) {
-  const result = a < b ? 1 : a > b ? -1 : 0;
-  return inverse ? -result : result;
+  return (inverse ? -1 : 1) * (a < b ? 1 : a > b ? -1 : 0);
 }
 
 export default function Home() {
