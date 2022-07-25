@@ -20,14 +20,13 @@ function compare(a, b, inverse = false) {
 }
 
 export default function Home() {
-  const [column, setColumn] = React.useState({
-    number: 0.25,
-    artist: 0.25,
-    title: 0.25,
-    label: 0.25,
-  });
+  const [columns, setColumns] = React.useState([
+    { key: 'number', label: '#', width: 0.25 },
+    { key: 'artist', label: 'Artist', width: 0.25 },
+    { key: 'title', label: 'Title', width: 0.25 },
+    { key: 'label', label: 'Label', width: 0.25 },
+  ]);
   const [list, setList] = React.useState(data);
-
   const ref = React.useRef();
 
   // `sortState` is cleared every time `useState` is called
@@ -64,27 +63,18 @@ export default function Home() {
   }
 
   function resizeRow(dataKey, deltaX, width) {
+    const index = columns.findIndex((value) => value.key === dataKey);
     const percentDelta = deltaX / width;
 
-    if (dataKey === 'number') {
-      setColumn({
-        ...column,
-        number: column.number + percentDelta,
-        artist: column.artist - percentDelta,
-      });
-    } else if (dataKey === 'artist') {
-      setColumn({
-        ...column,
-        artist: column.artist + percentDelta,
-        title: column.title - percentDelta,
-      });
-    } else if (dataKey === 'title') {
-      setColumn({
-        ...column,
-        title: column.title + percentDelta,
-        label: column.label - percentDelta,
-      });
-    }
+    setColumns(
+      columns.map((column, i) => {
+        if (i === index)
+          return { ...column, width: column.width + percentDelta };
+        else if (i === index + 1)
+          return { ...column, width: column.width - percentDelta };
+        return column;
+      })
+    );
   }
 
   function sort({ sortBy, sortDirection }) {
@@ -121,30 +111,17 @@ export default function Home() {
           sort={sortState.sort}
           width={width}
         >
-          <Column
-            dataKey="number"
-            headerRenderer={(data) => headerRenderer(data, width)}
-            label="#"
-            width={width * column.number}
-          />
-          <Column
-            dataKey="artist"
-            headerRenderer={(data) => headerRenderer(data, width)}
-            label="Artist"
-            width={width * column.artist}
-          />
-          <Column
-            dataKey="title"
-            headerRenderer={(data) => headerRenderer(data, width)}
-            label="Title"
-            width={width * column.title}
-          />
-          <Column
-            dataKey="label"
-            headerRenderer={(data) => headerRenderer(data, width, false)}
-            label="Label"
-            width={width * column.label}
-          />
+          {columns.map((column, i) => (
+            <Column
+              dataKey={column.key}
+              headerRenderer={(data) =>
+                headerRenderer(data, width, i !== columns.length - 1)
+              }
+              key={column.key}
+              label={column.label}
+              width={width * column.width}
+            />
+          ))}
         </Table>
       )}
     </AutoSizer>
